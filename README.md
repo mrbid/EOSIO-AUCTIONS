@@ -19,3 +19,4 @@ Now call getwinner() to get the auction winner.
 
 /private - this directory contains a simplified and private version with no multi_array, because frankly, it's not really needed unless you want to log everyone that took part in the auction, only the winner really matters.
 
+Try not to use the pre-compiled smart contracts if you can, as they may not be upto-date with the latest code release.
