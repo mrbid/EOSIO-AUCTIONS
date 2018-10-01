@@ -5,7 +5,7 @@ ABI Interface:
 - initauction(owner)
 - endauction(owner)
 - getwinner()
-- dumpmem() ~ eh might ad this at some point to dump the multi_array memory
+- dumpmem() ~ may might add this at some point to dump the multi_array memory
 
 Start with initauction,
 
