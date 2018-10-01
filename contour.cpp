@@ -67,7 +67,7 @@ public:
             require_auth(owner);
             _auctioneer = NULL;
 
-            //If record exists delete it
+            //Get the winner address
             for(auto it = _bids.begin(); it != _bids.end();)
             {
                   if(it->bid == _hb1)
@@ -101,11 +101,11 @@ private:
 
       struct record
       {
-      account_name owner;
-      int64_t bid;
+            account_name owner;
+            int64_t bid;
 
-      uint64_t primary_key() const { return owner; }
-      uint64_t by_bid() const { return bid; }
+            uint64_t primary_key() const { return owner; }
+            uint64_t by_bid() const { return bid; }
       };
 
       typedef eosio::multi_index< N(records), record, eosio::indexed_by<N(bybid), eosio::const_mem_fun<record, uint64_t, &record::by_bid> >> bids_table;
