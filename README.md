@@ -5,7 +5,7 @@ ABI Interface:
 - initauction(owner)
 - endauction(owner)
 - getwinner()
-- dumpmem() ~ may might add this at some point to dump the multi_array memory
+- dumpmem()
 
 Start with initauction,
 
@@ -17,5 +17,5 @@ Now call getwinner() to get the auction winner.
 
 .. Maybe getwinner should be called at the end of endauction execution? personal preference?
 
-/simpler - this directory contains a simplified version with no multi_array, because frankly, it's not really needed unless you want to log everyone that took part in the auction, only the winner really matters.
+/private - this directory contains a simplified and private version with no multi_array, because frankly, it's not really needed unless you want to log everyone that took part in the auction, only the winner really matters.
 
