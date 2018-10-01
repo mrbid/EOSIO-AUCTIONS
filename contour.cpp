@@ -91,6 +91,13 @@ public:
             else
                   eosio::print("This auction has finished.\n");
       }
+      
+      //Dump memory (all bids and addresses)
+      void dumpmem()
+      {
+            for(auto it = _bids.begin(); it != _bids.end(); ++it)
+                  eosio::print("Address: ", it->owner, " - Bid:", it->bid, "\n");
+      }
 
 private:
 
@@ -113,4 +120,4 @@ private:
 
 };
 
-EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner))
+EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner)(dumpmem))
