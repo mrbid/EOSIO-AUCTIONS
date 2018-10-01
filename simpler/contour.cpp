@@ -53,13 +53,21 @@ public:
       }
 
       //Who was the winner / who is the current winner?
-      void getwinner()
+      void getwinner(account_name owner)
       {
-            eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
-            if(_done == false)
-                  eosio::print("The auction has not finished yet.\n");
+            require_auth(owner);
+            if(_auctioneer == owner)
+            {
+                  eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
+                  if(_done == false)
+                        eosio::print("The auction has not finished yet.\n");
+                  else
+                        eosio::print("This auction has finished.\n");
+            }
             else
-                  eosio::print("This auction has finished.\n");
+            {
+                  eosio::print("You need to be the Auctioneer to see the winner.\n");
+            }
       }
 
 private:
