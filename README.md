@@ -14,4 +14,4 @@ ABI Interface [countour_private.cpp]: (Owner pays for all ram, only once when se
 
 Try not to use the pre-compiled smart contracts if you can, as they may not be upto-date with the latest code release.
 
-Private auctions are more efficient on ram uage than public ones.
+countour_private is more efficient on ram uage than countour_public.
