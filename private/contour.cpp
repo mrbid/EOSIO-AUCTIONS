@@ -49,7 +49,7 @@ public:
             require_auth(owner);
             _auctioneer = NULL;
             _done = true;
-            getwinner();
+            getwinner(owner);
       }
 
       //Who was the winner / who is the current winner?
