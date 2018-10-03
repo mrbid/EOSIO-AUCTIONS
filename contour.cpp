@@ -131,7 +131,7 @@ private:
             uint64_t by_bid() const { return bid; }
       };
 
-      typedef eosio::multi_index< N(records), record, eosio::indexed_by<N(bybid), eosio::const_mem_fun<record, uint64_t, &record::by_bid> >> bids_table;
+      typedef eosio::multi_index<N(records), record> bids_table;
       bids_table _bids;
 
 };
