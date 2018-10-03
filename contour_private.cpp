@@ -51,18 +51,6 @@ public:
             });
       }
 
-      ///Start a new Auction  
-      void initauction(account_name owner)
-      {
-            require_auth(owner);
-            auto r = _mem.begin();
-            eosio_assert(r->auctioneer != NULL, "This auction has already been initialized.");
-            _mem.modify(r, _self, [&](auto& w)
-            {
-                  w.auctioneer = owner;
-            });
-      }
-
       //Finish the auction and set the winner  
       void endauction(account_name owner)
       {
