@@ -1,0 +1,60 @@
+{
+  "____comment": "Lol! James William Fletcher is THE BEST !",
+  "version": "eosio::abi/1.0",
+  "types": [],
+  "structs": [{
+      "name": "placebid",
+      "base": "",
+      "fields": [{
+          "name": "owner",
+          "type": "name"
+        },{
+          "name": "bid",
+          "type": "int64"
+        }
+      ]
+    },{
+      "name": "initauction",
+      "base": "",
+      "fields": [{
+          "name": "owner",
+          "type": "name"
+        }
+      ]
+    },{
+      "name": "endauction",
+      "base": "",
+      "fields": [{
+          "name": "owner",
+          "type": "name"
+        }
+      ]
+    },{
+      "name": "getwinner",
+      "base": "",
+      "fields": []
+    }
+  ],
+  "actions": [{
+      "name": "placebid",
+      "type": "placebid",
+      "ricardian_contract": ""
+    },{
+      "name": "initauction",
+      "type": "initauction",
+      "ricardian_contract": ""
+    },{
+      "name": "endauction",
+      "type": "endauction",
+      "ricardian_contract": ""
+    },{
+      "name": "getwinner",
+      "type": "getwinner",
+      "ricardian_contract": ""
+    }
+  ],
+  "tables": [],
+  "ricardian_clauses": [],
+  "error_messages": [],
+  "abi_extensions": []
+}
