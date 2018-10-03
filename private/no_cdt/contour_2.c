@@ -1,13 +1,13 @@
-void require_auth(long long owner);
+void require_auth(unsigned long long owner);
 void prints(const char* cstr, ...);
-long long _auctioneer=0; //Auctioneer Address (Makes sure only the Auction `initiater` can end the Auction)
-long long _winner=0; //Winning Address
-long long _hb2=0; //Highest Bid (2nd price)
-long long _hb1=0; //Highest Bid (1st price)
-long long _done=0;
+unsigned long long _auctioneer=0; //Auctioneer Address (Makes sure only the Auction `initiater` can end the Auction)
+unsigned long long _winner=0; //Winning Address
+unsigned long long _hb2=0; //Highest Bid (2nd price)
+unsigned long long _hb1=0; //Highest Bid (1st price)
+unsigned long long _done=0;
 
 //Places a bid
-void placebid(long long owner, long long bid)
+void placebid(unsigned long long owner, unsigned long long bid)
 {
       require_auth(owner);
 
@@ -27,7 +27,7 @@ void placebid(long long owner, long long bid)
 }
 
 ///Start a new Auction  
-void initauction(long long owner)
+void initauction(unsigned long long owner)
 {
       require_auth(owner);
       if(_auctioneer != 0)
@@ -39,7 +39,7 @@ void initauction(long long owner)
 }
 
 //Who was the winner / who is the current winner?
-void getwinner(long long owner)
+void getwinner(unsigned long long owner)
 {
       require_auth(owner);
       if(_auctioneer == owner)
@@ -57,7 +57,7 @@ void getwinner(long long owner)
 }
 
 //Finish the auction and set the winner  
-void endauction(long long owner)
+void endauction(unsigned long long owner)
 {
       require_auth(owner);
       _auctioneer = 0;
