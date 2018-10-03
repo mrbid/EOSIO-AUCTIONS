@@ -1,9 +1,7 @@
 /*
-
       1st & 2nd price auction model smart contract for EOS
       By James William Fletcher (~2018)
       http://github.com/mrbid
-
 */
 #include <eosiolib/eosio.hpp>
 
@@ -13,42 +11,68 @@ class auction : public eosio::contract
 public:
 
       //Constructor
-      auction(account_name s): contract(s), _auctioneer(NULL), _winner(NULL), _done(false) {}
+      auction(account_name s): contract(s), _mem(s, s)
+      {
+            //Init only memory block required, make contract owner pay for the ram
+            _mem.emplace(_self, [&](auto& r)
+            {
+                  r.auctioneer = _self;
+                  r.winner = NULL;
+                  r.hb1 = 0;
+                  r.hb2 = 0;
+                  r.done = false;
+            });
+      }
 
       //Places a bid
       void placebid(account_name owner, int64_t bid)
       {
             require_auth(owner);
 
+            //Get memory
+            auto r = _mem.begin();
+
             //Is this bid high enough? 
-            if(_hb1 > bid)
+            if(r->hb1 > bid)
             {
-                  eosio::print("Your bid is too low, it's outbid.\n\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n");
+                  eosio::print("Your bid is too low, it's outbid.\n\nHighest Bid: ", r->hb1, "\nSecond Highest Bid: ", r->hb2, "\n");
                   return;
             }
 
-            //Set current winner (highest bidder)
-            _winner = owner;
+            //Write mem
+            _mem.modify(r, _self, [&](auto& w)
+            {
+                  //Set current winner (highest bidder)
+                  w.winner = owner;
 
-            //Set new highest bid (and last highest)
-            _hb2 = _hb1;
-            _hb1 = bid;
+                  //Set new highest bid (and last highest)
+                  w.hb2 = r->hb1;
+                  w.hb1 = bid;
+            });
       }
 
       ///Start a new Auction  
       void initauction(account_name owner)
       {
             require_auth(owner);
-            eosio_assert(_auctioneer != NULL, "This auction has already been initialized.");
-            _auctioneer = owner;
+            auto r = _mem.begin();
+            eosio_assert(r->auctioneer != NULL, "This auction has already been initialized.");
+            _mem.modify(r, _self, [&](auto& w)
+            {
+                  w.auctioneer = owner;
+            });
       }
 
       //Finish the auction and set the winner  
       void endauction(account_name owner)
       {
             require_auth(owner);
-            _auctioneer = NULL;
-            _done = true;
+            auto r = _mem.begin();
+            _mem.modify(r, _self, [&](auto& w)
+            {
+                  w.auctioneer = NULL;
+                  w.done = true;
+            });
             getwinner(owner);
       }
 
@@ -56,10 +80,11 @@ public:
       void getwinner(account_name owner)
       {
             require_auth(owner);
-            if(_auctioneer == owner)
+            auto r = _mem.begin();
+            if(r->auctioneer == owner)
             {
-                  eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
-                  if(_done == false)
+                  eosio::print("The winning address: ", r->winner, "\nHighest Bid: ", r->hb1, "\nSecond Highest Bid: ", r->hb2, "\n\n");
+                  if(r->done == false)
                         eosio::print("The auction has not finished yet.\n");
                   else
                         eosio::print("This auction has finished.\n");
@@ -72,11 +97,19 @@ public:
 
 private:
 
-      account_name _auctioneer; //Auctioneer Address (Makes sure only the Auction `initiater` can end the Auction)
-      account_name _winner; //Winning Address
-      uint64_t _hb2; //Highest Bid (2nd price)
-      uint64_t _hb1; //Highest Bid (1st price)
-      bool _done;
+      struct record
+      {
+            account_name auctioneer; //Auctioneer Address (Makes sure only the Auction `initiater` can end the Auction)
+            account_name winner; //Winning Address
+            uint64_t hb2; //Highest Bid (2nd price)
+            uint64_t hb1; //Highest Bid (1st price)
+            bool done;
+
+            uint64_t primary_key() const{return winner;}
+      };
+
+      typedef eosio::multi_index<N(records), record> mem_table;
+      mem_table _mem;
 
 };
 
