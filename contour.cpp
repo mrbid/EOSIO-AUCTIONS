@@ -13,12 +13,32 @@ class auction : public eosio::contract
 public:
 
       //Constructor
-      auction(account_name s): contract(s), _bids(s, s), _auctioneer(NULL), _winner(NULL) {}
+      auction(account_name s): contract(s), _bids(s, s) {}
+
+      //Get 1st and 2nd bids
+      void ghbs()
+      {
+            _hb1 = 0;
+            _hb2 = 0;
+            _winner = 0;
+            for(auto it = _bids.begin(); it != _bids.end(); ++it)
+            {
+                  if(it->bid > hb)
+                  {
+                        _hb2 = _hb1;
+                        _hb1 = it->bid;
+                        _winner = it->owner;
+                  }
+            }
+      }
 
       //Places a bid
       void placebid(account_name owner, int64_t bid)
       {
             require_auth(owner);
+            
+            //
+            ghbs();
 
             //Is this bid high enough? 
             if(_hb1 > bid)
@@ -53,82 +73,32 @@ public:
             });
       }
 
-      ///Start a new Auction  
-      void initauction(account_name owner)
-      {
-            require_auth(owner);
-            eosio_assert(_auctioneer != NULL, "This auction has already been initialized.");
-            _auctioneer = owner;
-      }
-
-      //Finish the auction and set the winner  
-      void endauction(account_name owner)
-      {
-            require_auth(owner);
-            if(_auctioneer == owner)
-            {
-                  _auctioneer = NULL;
-
-                  //Get the winner address
-                  for(auto it = _bids.begin(); it != _bids.end();)
-                  {
-                        if(it->bid == _hb1)
-                        {   
-                              _winner = it->owner;
-                              break;
-                        }
-                        else
-                        {
-                              ++it;
-                        }       
-                  }
-                  
-                  getwinner(owner);
-            }
-      }
-
       //Who was the winner / who is the current winner?
       void getwinner(account_name owner)
       {
             require_auth(owner);
-            if(_auctioneer == owner)
-            {
-                  eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
-                  if(_winner == NULL)
-                        eosio::print("The auction has not finished yet.\n");
-                  else
-                        eosio::print("This auction has finished.\n");
-            }
-            else
-            {
-                  eosio::print("You need to be the Auctioneer to see the winner.\n");
-            }
+            ghbs();
+            eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
       }
-      
       
       //Dump memory (all bids and addresses)
       void getbids(account_name owner)
       {
             require_auth(owner);
-            if(_auctioneer == owner)
-                  for(auto it = _bids.begin(); it != _bids.end(); ++it)
-                        eosio::print("Address: ", it->owner, " - Bid:", it->bid, "\n");
+            for(auto it = _bids.begin(); it != _bids.end(); ++it)
+                  eosio::print("Address: ", it->owner, " - Bid:", it->bid, "\n");
       }
 
 private:
 
-      account_name _auctioneer; //Auctioneer Address (Makes sure only the Auction `initiater` can end the Auction)
-      account_name _winner; //Winning Address
-      uint64_t _hb2; //Highest Bid (2nd price)
-      uint64_t _hb1; //Highest Bid (1st price)
-
+      uint64_t _hb2;
+      uint64_t _hb1;
+      account_name _winner;
+      
       struct record
       {
             account_name owner;
             int64_t bid;
-
-            uint64_t primary_key() const { return owner; }
-            uint64_t by_bid() const { return bid; }
       };
 
       typedef eosio::multi_index<N(records), record> bids_table;
@@ -136,4 +106,4 @@ private:
 
 };
 
-EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner)(getbids))
+EOSIO_ABI(auction, (placebid)(getwinner)(getbids))
