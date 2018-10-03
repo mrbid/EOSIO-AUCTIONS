@@ -1,9 +1,7 @@
 /*
-
       1st & 2nd price auction model smart contract for EOS
       By James William Fletcher (~2018)
       http://github.com/mrbid
-
 */
 #include <eosiolib/eosio.hpp>
 
@@ -23,7 +21,7 @@ public:
             _winner = 0;
             for(auto it = _bids.begin(); it != _bids.end(); ++it)
             {
-                  if(it->bid > hb)
+                  if(it->bid > _hb1)
                   {
                         _hb2 = _hb1;
                         _hb1 = it->bid;
@@ -99,6 +97,7 @@ private:
       {
             account_name owner;
             int64_t bid;
+            uint64_t primary_key() const{return owner;}
       };
 
       typedef eosio::multi_index<N(records), record> bids_table;
