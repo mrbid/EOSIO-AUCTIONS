@@ -65,38 +65,54 @@ public:
       void endauction(account_name owner)
       {
             require_auth(owner);
-            _auctioneer = NULL;
-
-            //Get the winner address
-            for(auto it = _bids.begin(); it != _bids.end();)
+            if(_auctioneer == owner)
             {
-                  if(it->bid == _hb1)
-                  {   
-                        _winner = it->owner;
-                        break;
-                  }
-                  else
+                  _auctioneer = NULL;
+
+                  //Get the winner address
+                  for(auto it = _bids.begin(); it != _bids.end();)
                   {
-                        ++it;
-                  }       
+                        if(it->bid == _hb1)
+                        {   
+                              _winner = it->owner;
+                              break;
+                        }
+                        else
+                        {
+                              ++it;
+                        }       
+                  }
+                  
+                  getwinner(owner);
             }
       }
 
       //Who was the winner / who is the current winner?
-      void getwinner()
+      void getwinner(account_name owner)
       {
-            eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
-            if(_winner == NULL)
-                  eosio::print("The auction has not finished yet.\n");
+            require_auth(owner);
+            if(_auctioneer == owner)
+            {
+                  eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
+                  if(_winner == NULL)
+                        eosio::print("The auction has not finished yet.\n");
+                  else
+                        eosio::print("This auction has finished.\n");
+            }
             else
-                  eosio::print("This auction has finished.\n");
+            {
+                  eosio::print("You need to be the Auctioneer to see the winner.\n");
+            }
       }
       
+      
       //Dump memory (all bids and addresses)
-      void dumpmem()
+      void getbids(account_name owner)
       {
-            for(auto it = _bids.begin(); it != _bids.end(); ++it)
-                  eosio::print("Address: ", it->owner, " - Bid:", it->bid, "\n");
+            require_auth(owner);
+            if(_auctioneer == owner)
+                  for(auto it = _bids.begin(); it != _bids.end(); ++it)
+                        eosio::print("Address: ", it->owner, " - Bid:", it->bid, "\n");
       }
 
 private:
@@ -120,4 +136,4 @@ private:
 
 };
 
-EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner)(dumpmem))
+EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner)(getbids))
