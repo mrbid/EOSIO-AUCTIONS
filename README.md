@@ -16,3 +16,10 @@ ABI Interface [countour_private.cpp]: (Owner pays for all ram, only once when se
 Try not to use the pre-compiled smart contracts if you can, as they may not be upto-date with the latest code release.
 
 countour_private is more efficient on ram uage than countour_public.
+
+
+:: Thoughts for the future
+
+It's notable that a public auction cannot be reset, and that maybe a public auction should identify it's purpose with some kind of queryauctionpurpose() function, but this is optional.
+
+As for private auctions, anyone can take place, maybe bidding access should be password protected?
