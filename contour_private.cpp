@@ -45,6 +45,13 @@ public:
       void placebid(account_name owner, int64_t bid)
       {
             require_auth(owner);
+            
+            //Is the auction done?
+            if(r->done == true)
+            {
+                  eosio::print("Sorry this auction has finished.\n");
+                  return;
+            }
 
             //Get memory
             auto r = _mem.begin();
