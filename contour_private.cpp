@@ -23,6 +23,23 @@ public:
                   r.done = false;
             });
       }
+      
+      //Resets the auction
+      void reset()
+      {
+            require_auth(owner);
+            auto r = _mem.begin();
+            if(r->auctioneer == owner)
+            {
+                  _mem.modify(r, _self, [&](auto& w)
+                  {
+                        w.winner = NULL;
+                        w.hb1 = 0;
+                        w.hb2 = 0;
+                        w.done = false;
+                  });  
+            }
+      }
 
       //Places a bid
       void placebid(account_name owner, int64_t bid)
@@ -58,7 +75,6 @@ public:
             auto r = _mem.begin();
             _mem.modify(r, _self, [&](auto& w)
             {
-                  w.auctioneer = NULL;
                   w.done = true;
             });
             getwinner(owner);
