@@ -9,6 +9,7 @@ ABI Interface [countour_private.cpp]: (Owner pays for all ram, only once when se
 - placebid(user, bid) //Users can place bids
 - getwinner() //Get's the current status of the running or ended contract
 - endauction() //Ends the auction, can only be called by contract initiator
+- reset() //Reset's the auction so that the contract can be re-used for another auction.
 
 /no_cdt - this directory experiments with implementing the private version of the smart contract in pure C.
 
