@@ -14,7 +14,7 @@ public:
       auction(account_name s): contract(s), _bids(s, s) {}
 
       //Get 1st and 2nd bids
-      void ghbs()
+      void sync()
       {
             _hb1 = 0;
             _hb2 = 0;
@@ -35,8 +35,8 @@ public:
       {
             require_auth(owner);
             
-            //
-            ghbs();
+            //Sync local variables from persistant storage
+            sync();
 
             //Is this bid high enough? 
             if(_hb1 > bid)
@@ -75,7 +75,7 @@ public:
       void getwinner(account_name owner)
       {
             require_auth(owner);
-            ghbs();
+            sync();
             eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
       }
       
