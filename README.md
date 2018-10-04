@@ -22,4 +22,4 @@ countour_private is more efficient on ram uage than countour_public.
 
 It's notable that a public auction cannot be reset, and that maybe a public auction should identify it's purpose with some kind of queryauctionpurpose() function, but this is optional.
 
-As for private auctions, anyone can take place, maybe bidding access should be password protected?
+As for private auctions, bidding is currently open to anyone aware of it's existance, maybe bidding access could be password protected? Although, only distributing the awareness of the auction is security enough in my reasoning.
