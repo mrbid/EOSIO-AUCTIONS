@@ -35,7 +35,7 @@ public:
       {
             require_auth(owner);
             
-            //Sync local variables from persistant storage
+            //Sync local variables from persistent storage
             sync();
 
             //Is this bid high enough? 
