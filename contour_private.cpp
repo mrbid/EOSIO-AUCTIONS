@@ -25,7 +25,7 @@ public:
       }
       
       //Resets the auction
-      void reset()
+      void reset(account_name owner)
       {
             require_auth(owner);
             auto r = _mem.begin();
@@ -46,15 +46,15 @@ public:
       {
             require_auth(owner);
             
+            //Get memory
+            auto r = _mem.begin();
+            
             //Is the auction done?
             if(r->done == true)
             {
                   eosio::print("Sorry this auction has finished.\n");
                   return;
             }
-
-            //Get memory
-            auto r = _mem.begin();
 
             //Is this bid high enough? 
             if(r->hb1 > bid)
@@ -124,4 +124,4 @@ private:
 
 };
 
-EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner))
+EOSIO_ABI(auction, (placebid)(endauction)(getwinner)(reset))
