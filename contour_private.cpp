@@ -116,7 +116,7 @@ private:
             uint64_t hb1; //Highest Bid (1st price)
             bool done;
 
-            uint64_t primary_key() const{return winner;}
+            uint64_t primary_key() const{return auctioneer;}
       };
 
       typedef eosio::multi_index<N(records), record> mem_table;
