@@ -11,24 +11,29 @@ class auction : public eosio::contract
 public:
 
       //Constructor
-      auction(account_name s): contract(s), _mem(s, s)
+      auction(account_name s): contract(s), _mem(s, 0){}
+      
+      //Inits Auction
+      void initauction(account_name owner)
       {
+            require_auth(owner);
+
             //Init only memory block required, make contract owner pay for the ram
-            _mem.emplace(_self, [&](auto& r)
+            _mem.emplace(owner, [&](auto& r)
             {
-                  r.auctioneer = _self;
+                  r.auctioneer = owner;
                   r.winner = NULL;
                   r.hb1 = 0;
                   r.hb2 = 0;
                   r.done = false;
             });
       }
-      
+
       //Resets the auction
       void reset(account_name owner)
       {
             require_auth(owner);
-            auto r = _mem.begin();
+            auto r = _mem.cbegin();
             if(r->auctioneer == owner)
             {
                   _mem.modify(r, _self, [&](auto& w)
@@ -45,26 +50,26 @@ public:
       void placebid(account_name owner, int64_t bid)
       {
             require_auth(owner);
-            
+
             //Get memory
-            auto r = _mem.begin();
+            auto r = _mem.cbegin();
             
             //Is the auction done?
             if(r->done == true)
             {
-                  eosio::print("Sorry this auction has finished.\n");
+                  eosio::print("Sorry this auction has finished.");
                   return;
             }
 
             //Is this bid high enough? 
-            if(r->hb1 > bid)
+            if(r->hb1 >= bid)
             {
-                  eosio::print("Your bid is too low, it's outbid.\n\nHighest Bid: ", r->hb1, "\nSecond Highest Bid: ", r->hb2, "\n");
+                  eosio::print("Your bid is too low, it's outbid. : Highest Bid: ", r->hb1, " : Second Highest Bid: ", r->hb2);
                   return;
             }
 
             //Write mem
-            _mem.modify(r, _self, [&](auto& w)
+            _mem.modify(r, r->auctioneer, [&](auto& w)
             {
                   //Set current winner (highest bidder)
                   w.winner = owner;
@@ -79,7 +84,7 @@ public:
       void endauction(account_name owner)
       {
             require_auth(owner);
-            auto r = _mem.begin();
+            auto r = _mem.cbegin();
             _mem.modify(r, _self, [&](auto& w)
             {
                   w.done = true;
@@ -91,18 +96,18 @@ public:
       void getwinner(account_name owner)
       {
             require_auth(owner);
-            auto r = _mem.begin();
+            auto r = _mem.cbegin();
             if(r->auctioneer == owner)
             {
-                  eosio::print("The winning address: ", r->winner, "\nHighest Bid: ", r->hb1, "\nSecond Highest Bid: ", r->hb2, "\n\n");
+                  eosio::print("The winning address: ", r->winner, " : Highest Bid: ", r->hb1, " : Second Highest Bid: ", r->hb2);
                   if(r->done == false)
-                        eosio::print("The auction has not finished yet.\n");
+                        eosio::print(" : The auction has not finished yet.");
                   else
-                        eosio::print("This auction has finished.\n");
+                        eosio::print(" : This auction has finished.");
             }
             else
             {
-                  eosio::print("You need to be the Auctioneer to see the winner.\n");
+                  eosio::print("You need to be the Auctioneer to see the winner.");
             }
       }
 
@@ -124,4 +129,4 @@ private:
 
 };
 
-EOSIO_ABI(auction, (placebid)(endauction)(getwinner)(reset))
+EOSIO_ABI(auction, (placebid)(initauction)(endauction)(getwinner)(reset))
