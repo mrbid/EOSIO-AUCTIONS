@@ -50,7 +50,7 @@ public:
             sync();
 
             //Is this bid high enough? 
-            if(_hb1 > bid)
+            if(_hb1 >= bid)
             {
                   eosio::print("Your bid is too low, it's outbid. : Highest Bid: ", _hb1, " : Second Highest Bid: ", _hb2);
                   return;
