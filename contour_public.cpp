@@ -11,7 +11,7 @@ class auction : public eosio::contract
 public:
 
       //Constructor
-      auction(account_name s): contract(s), _bids(s, s) {}
+      auction(account_name s): contract(s), _bids(s, 0) {}
 
       //Get 1st and 2nd bids
       void sync()
@@ -19,12 +19,23 @@ public:
             _hb1 = 0;
             _hb2 = 0;
             _winner = 0;
+
+            //Get highest
             for(auto it = _bids.begin(); it != _bids.end(); ++it)
             {
                   if(it->bid > _hb1)
                   {
-                        _hb2 = _hb1;
                         _hb1 = it->bid;
+                        _winner = it->owner;
+                  }
+            }
+
+            //Get second highest
+            for(auto it = _bids.begin(); it != _bids.end(); ++it)
+            {
+                  if(it->bid > _hb2 && it->bid != _hb1)
+                  {
+                        _hb2 = it->bid;
                         _winner = it->owner;
                   }
             }
@@ -41,7 +52,7 @@ public:
             //Is this bid high enough? 
             if(_hb1 > bid)
             {
-                  eosio::print("Your bid is too low, it's outbid.\n\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n");
+                  eosio::print("Your bid is too low, it's outbid. : Highest Bid: ", _hb1, " : Second Highest Bid: ", _hb2);
                   return;
             }
 
@@ -76,7 +87,7 @@ public:
       {
             require_auth(owner);
             sync();
-            eosio::print("The winning address: ", _winner, "\nHighest Bid: ", _hb1, "\nSecond Highest Bid: ", _hb2, "\n\n");
+            eosio::print("The winning address: ", _winner, " : Highest Bid: ", _hb1, " : Second Highest Bid: ", _hb2);
       }
       
       //Dump memory (all bids and addresses)
@@ -84,7 +95,7 @@ public:
       {
             require_auth(owner);
             for(auto it = _bids.begin(); it != _bids.end(); ++it)
-                  eosio::print("Address: ", it->owner, " - Bid:", it->bid, "\n");
+                  eosio::print("Address: ", it->owner, " - Bid:", it->bid, " : ");
       }
 
 private:
@@ -97,7 +108,7 @@ private:
       {
             account_name owner;
             int64_t bid;
-            uint64_t primary_key() const{return owner;}
+            uint64_t primary_key() const{return bid;}
       };
 
       typedef eosio::multi_index<N(records), record> bids_table;
