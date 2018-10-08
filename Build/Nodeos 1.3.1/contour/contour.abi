@@ -1,0 +1,91 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Mon Oct  8 03:02:39 2018",
+    "version": "eosio::abi/1.0",
+    "structs": [
+        {
+            "name": "endauction",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "getwinner",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "initauction",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "placebid",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "bid",
+                    "type": "int64"
+                }
+            ]
+        },
+        {
+            "name": "reset",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                }
+            ]
+        }
+    ],
+    "types": [],
+    "actions": [
+        {
+            "name": "endauction",
+            "type": "endauction",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "getwinner",
+            "type": "getwinner",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "initauction",
+            "type": "initauction",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "placebid",
+            "type": "placebid",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "reset",
+            "type": "reset",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [],
+    "ricardian_clauses": [],
+    "abi_extensions": []
+}

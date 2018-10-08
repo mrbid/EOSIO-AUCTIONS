@@ -1,0 +1,61 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Mon Oct  8 04:27:28 2018",
+    "version": "eosio::abi/1.0",
+    "structs": [
+        {
+            "name": "getbids",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "getwinner",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "placebid",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "bid",
+                    "type": "int64"
+                }
+            ]
+        }
+    ],
+    "types": [],
+    "actions": [
+        {
+            "name": "getbids",
+            "type": "getbids",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "getwinner",
+            "type": "getwinner",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "placebid",
+            "type": "placebid",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [],
+    "ricardian_clauses": [],
+    "abi_extensions": []
+}
