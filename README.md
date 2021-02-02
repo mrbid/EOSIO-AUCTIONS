@@ -1,11 +1,11 @@
 ## This is an EOS smart contract for private or public 1st and 2nd price auctions of real or digital inventory where an auction master (auctioneer) initialises the auction and users can submit bids.
 
-**ABI Interface** [[`auction_public.cpp`](https://github.com/mrbid/EOSIO-AUCTIONS/blob/main/auction_public.cpp)]: *(Action caller pays for used ram)*
+**ABI Interface** [[`auction_public.cpp`](https://github.com/mrbid/EOSIO-AUCTIONS/blob/master/auction_private.cpp)]: *(Action caller pays for used ram)*
 - `placebid(user, bid)` - Users can place bids
 - `getwinner()` - Get's the current status of the running or ended contract
 - `getbids()` - Dumps list of all bids from x addresses
 
-**ABI Interface** [[`auction_private.cpp`](https://github.com/mrbid/EOSIO-AUCTIONS/blob/main/auction_private.cpp)]: *(Owner pays for all ram, only once when setting up the contract)*
+**ABI Interface** [[`auction_private.cpp`](https://github.com/mrbid/EOSIO-AUCTIONS/blob/master/auction_private.cpp)]: *(Owner pays for all ram, only once when setting up the contract)*
 - `placebid(user, bid)` - Users can place bids
 - `getwinner()` - Get's the current status of the running or ended contract`
 - `endauction()` - Ends the auction, can only be called by contract initiator`
